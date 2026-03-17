@@ -9,24 +9,24 @@
   <title>Antonio's Job Board</title>
   <style>
     :root {
-      /* ── Dark theme: Spotify-inspired deep blacks ── */
-      --bg: #121212;
-      --surface: #181818;
-      --surface2: #282828;
-      --border: #3d3d3d;
-      --accent: #1db954;
-      --accent-soft: rgba(29, 185, 84, 0.14);
-      --accent2: #1db954;
-      --text: #ffffff;
-      --text-muted: #a7a7a7;
-      --strong: #1db954;
+      /* ── Dark theme: Reddit-inspired ── */
+      --bg: #0d1117;
+      --surface: #1a1a1b;
+      --surface2: #272729;
+      --border: #343536;
+      --accent: #ff4500;
+      --accent-soft: rgba(255, 69, 0, 0.13);
+      --accent2: #ff6534;
+      --text: #d7dadc;
+      --text-muted: #818384;
+      --strong: #46d160;
       --good: #4f9cf7;
       --stretch: #ffa42b;
       --status-pending: #4f9cf7;
-      --status-rejected: #f04545;
-      --status-interview: #1db954;
-      --status-offer: #1db954;
-      --status-notapplied: #a7a7a7;
+      --status-rejected: #ff585b;
+      --status-interview: #46d160;
+      --status-offer: #46d160;
+      --status-notapplied: #818384;
     }
 
     /* ── Light theme (Apple.com-inspired) ── */
@@ -223,7 +223,7 @@
       font-size: 11px; font-weight: 700; padding: 4px 9px;
       border-radius: 20px; letter-spacing: 0.3px; text-transform: uppercase; white-space: nowrap;
     }
-    .fit-strong { background: rgba(29,185,84,0.15);  color: var(--strong); }
+    .fit-strong { background: rgba(70,209,96,0.15);  color: var(--strong); }
     .fit-good   { background: rgba(79,156,247,0.15); color: var(--good); }
     .fit-stretch{ background: rgba(255,164,43,0.15); color: var(--stretch); }
 
@@ -248,16 +248,19 @@
     .card-date   { font-size: 11px; color: var(--text-muted); }
 
     .apply-btn {
-      background: var(--accent); color: #fff; border: none;
-      border-radius: 8px; padding: 8px 16px;
+      background: transparent;
+      color: var(--accent);
+      border: 1.5px solid var(--accent);
+      border-radius: 8px; padding: 7px 15px;
       font-size: 13px; font-weight: 600; cursor: pointer;
-      text-decoration: none; display: inline-block; transition: opacity 0.15s;
+      text-decoration: none; display: inline-block;
+      transition: background 0.15s, color 0.15s;
     }
-    .apply-btn:hover { opacity: 0.85; }
+    .apply-btn:hover { background: var(--accent); color: #fff; }
 
     .new-badge {
       font-size: 10px; font-weight: 700;
-      background: rgba(29,185,84,0.2); color: var(--accent2);
+      background: rgba(255,69,0,0.18); color: var(--accent2);
       padding: 2px 7px; border-radius: 4px;
       margin-left: 6px; letter-spacing: 0.5px;
     }
@@ -314,37 +317,41 @@
     }
     .status-dot { width: 6px; height: 6px; border-radius: 50%; }
     .s-pending  { background: rgba(79,156,247,0.15);  color: var(--status-pending); }
-    .s-rejected { background: rgba(240,69,69,0.15);   color: var(--status-rejected); }
-    .s-interview{ background: rgba(29,185,84,0.15);   color: var(--status-interview); }
-    .s-offer    { background: rgba(29,185,84,0.15);   color: var(--status-offer); }
-    .s-notyet   { background: rgba(167,167,167,0.12); color: var(--status-notapplied); }
+    .s-rejected { background: rgba(255,88,91,0.15);   color: var(--status-rejected); }
+    .s-interview{ background: rgba(70,209,96,0.15);   color: var(--status-interview); }
+    .s-offer    { background: rgba(70,209,96,0.15);   color: var(--status-offer); }
+    .s-notyet   { background: rgba(129,131,132,0.15); color: var(--status-notapplied); }
 
     /* ── Inline status select in table ── */
     .status-select {
-      background: rgba(139,144,176,0.12);
+      background: rgba(129,131,132,0.12);
       color: var(--status-notapplied);
-      border: 1px solid transparent;
-      border-radius: 20px;
-      padding: 5px 10px;
-      font-size: 11px;
-      font-weight: 700;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 6px 28px 6px 11px;
+      font-size: 12px;
+      font-weight: 600;
       cursor: pointer;
       outline: none;
       -webkit-appearance: none;
       appearance: none;
-      letter-spacing: 0.2px;
-      transition: border-color 0.15s, background 0.15s, opacity 0.15s;
+      letter-spacing: 0.1px;
+      transition: border-color 0.15s, background 0.15s, opacity 0.15s, box-shadow 0.15s;
       white-space: nowrap;
-      max-width: 190px;
+      max-width: 210px;
+      /* Custom chevron arrow */
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23818384' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 9px center;
     }
-    .status-select:hover { border-color: var(--border); }
-    .status-select:focus { border-color: var(--accent); outline: none; }
-    .status-select option { background: var(--surface2); color: var(--text); font-weight: 600; }
-    .status-select.s-pending  { background: rgba(79,156,247,0.15);  color: var(--status-pending); }
-    .status-select.s-rejected { background: rgba(240,69,69,0.15);   color: var(--status-rejected); }
-    .status-select.s-interview{ background: rgba(29,185,84,0.15);   color: var(--status-interview); }
-    .status-select.s-offer    { background: rgba(29,185,84,0.15);   color: var(--status-offer); }
-    .status-select.s-notyet   { background: rgba(167,167,167,0.12); color: var(--status-notapplied); }
+    .status-select:hover { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); }
+    .status-select:focus { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-soft); outline: none; }
+    .status-select option { background: var(--surface2); color: var(--text); font-weight: 600; padding: 8px 12px; }
+    .status-select.s-pending   { background: rgba(79,156,247,0.12);  color: var(--status-pending);    border-color: rgba(79,156,247,0.35); }
+    .status-select.s-rejected  { background: rgba(255,88,91,0.12);   color: var(--status-rejected);   border-color: rgba(255,88,91,0.35); }
+    .status-select.s-interview { background: rgba(70,209,96,0.12);   color: var(--status-interview);  border-color: rgba(70,209,96,0.35); }
+    .status-select.s-offer     { background: rgba(70,209,96,0.12);   color: var(--status-offer);      border-color: rgba(70,209,96,0.35); }
+    .status-select.s-notyet    { background: rgba(129,131,132,0.10); color: var(--status-notapplied); border-color: rgba(129,131,132,0.3); }
     .status-select.saving     { opacity: 0.55; cursor: wait; pointer-events: none; }
 
     .tbl-salary { font-size: 12px; color: var(--accent2); font-weight: 600; white-space: nowrap; }
@@ -1208,7 +1215,7 @@ const CAT_COLORS = {
   'Investment Banking': '#4f6ef7',
   'Corporate Finance':  '#94a3b8',
   'FP&A':               '#a78bfa',
-  'Markets / S&T':      '#1db954',
+  'Markets / S&T':      '#46d160',
   'Advisory':           '#f59e0b',
   'Private Credit':     '#fb7185',
   'Asset Management':   '#34d399',
@@ -2441,18 +2448,43 @@ const IB_FIRMS_DIRECTORY = [
   { name:'Drexel Hamilton',        careerUrl:'https://drexelhamilton.com/careers/',                         category:'Diversity-Focused' },
 ];
 
-// ─── Guaranteed-real job links via Indeed search URLs ──────────────────────
-// Claude hallucinates specific job IDs — instead we build a live Indeed search
-// URL for each company+role so the link always resolves to current openings.
+// ─── Link resolution helpers ────────────────────────────────────────────────
+// Fall-back: live Indeed search for company + role (always resolves to current openings)
 function buildJobSearchURL(company, title) {
   const q = encodeURIComponent(`${company} ${title}`);
   return `https://www.indeed.com/jobs?q=${q}&l=New+York%2C+NY&sort=date&fromage=60`;
 }
 
+// Smart resolver — prefers direct career-page URLs over generic Indeed searches
+function resolveLeadLink(company, title, existingLink, source) {
+  // 1. CareerPage scrapes & TheMuse already have real, working URLs — keep them
+  if (existingLink && (source === 'CareerPage' || source === 'TheMuse')) {
+    return existingLink;
+  }
+
+  // 2. For Claude-generated leads, look up the company in the IB firm directory first
+  if (company) {
+    const cLower = company.toLowerCase().replace(/[,.'&()\-]/g, ' ').trim();
+    const cWords  = cLower.split(/\s+/).filter(w => w.length > 2);
+    const match   = IB_FIRMS_DIRECTORY.find(f => {
+      const fLower = f.name.toLowerCase().replace(/[,.'&()\-]/g, ' ').trim();
+      // Full match or first meaningful word overlap
+      return fLower === cLower
+          || cWords.some(w => fLower.includes(w))
+          || fLower.split(/\s+/).filter(w => w.length > 2).some(w => cLower.includes(w));
+    });
+    if (match) return match.careerUrl;
+  }
+
+  // 3. Last resort: Indeed job search (always live, just not role-specific)
+  return buildJobSearchURL(company, title);
+}
+
+// Sanitise a batch of leads — only replaces links that aren't already reliable
 function sanitizeLeadLinks(leads) {
   return leads.map(lead => ({
     ...lead,
-    link: buildJobSearchURL(lead.company || '', lead.title || ''),
+    link: resolveLeadLink(lead.company || '', lead.title || '', lead.link, lead._source),
   }));
 }
 
@@ -2513,7 +2545,7 @@ async function fetchFromIndeedRSS() {
       const xml  = new DOMParser().parseFromString(text, 'application/xml');
       if (xml.querySelector('parsererror')) continue;
 
-      for (const item of Array.from(xml.querySelectorAll('item')).slice(0, 8)) {
+      for (const item of Array.from(xml.querySelectorAll('item')).slice(0, 15)) {
         const titleRaw = item.querySelector('title')?.textContent || '';
         const link     = item.querySelector('link')?.textContent
                       || item.querySelector('guid')?.textContent || '';
@@ -2530,9 +2562,12 @@ async function fetchFromIndeedRSS() {
         tmp.innerHTML = descHtml;
         const desc = (tmp.textContent || '').replace(/\s+/g, ' ').trim().slice(0, 400);
 
-        if (role && company && link) {
+        if (role && company) {
+          // viewjob?jk=XXXX links expire within days — use a stable Indeed search instead
+          const stableLink = buildJobSearchURL(company, role);
           jobs.push({
-            title: role, company, location: 'New York, NY', link, description: desc,
+            title: role, company, location: 'New York, NY',
+            link: stableLink, description: desc,
             date_added: pubDate ? new Date(pubDate).toISOString() : new Date().toISOString(),
             _source: 'Indeed',
           });
@@ -2561,9 +2596,9 @@ async function fetchFromFirmCareerPages() {
                                'view all', 'see all', 'learn more', 'search jobs',
                                'search', 'find jobs', 'all jobs', 'all openings']);
 
-  // Pick 8 random firms per refresh for variety + reasonable load time
+  // Pick 18 random firms per refresh for broader coverage
   const shuffled = [...IB_FIRMS_DIRECTORY].sort(() => Math.random() - 0.5);
-  const sample = shuffled.slice(0, 8);
+  const sample = shuffled.slice(0, 18);
 
   const rawHits = [];
 
@@ -2659,7 +2694,7 @@ async function fetchFromFirmCareerPages() {
       seen.add(key);
       return true;
     })
-    .slice(0, 20); // Hard cap on career-page results per search
+    .slice(0, 35); // Hard cap on career-page results per search
 }
 
 // ─── Score real listings with Claude ───────────────────────────────────────
@@ -2668,9 +2703,9 @@ async function evaluateJobsWithClaude(rawJobs) {
 ${ANTONIO_PROFILE}
 
 Here are raw job listings to evaluate (JSON):
-${JSON.stringify(rawJobs.slice(0, 20), null, 2)}
+${JSON.stringify(rawJobs.slice(0, 35), null, 2)}
 
-Select the 6 best matches for Antonio. For each, return a JSON object:
+Select the best matches for Antonio (up to 15). For each, return a JSON object:
 {
   "id": "company-role-slug",
   "title": "Role Title",
@@ -2680,17 +2715,40 @@ Select the 6 best matches for Antonio. For each, return a JSON object:
   "salary": "Estimated salary range or Not Listed",
   "fit": "Strong Fit|Good Fit|Stretch",
   "description": "2-3 sentences explaining specifically why this role fits Antonio (mention his OCBC experience, deal exposure, or specific skills where relevant)",
-  "link": "the original link",
+  "link": "the original link — copy it exactly from the input, do not modify",
   "date_added": "${new Date().toISOString()}"
 }
 
 Return ONLY a valid JSON array, no other text.`;
 
-  const data = await callClaudeAPI([{ role: 'user', content: prompt }], 2500);
+  const data = await callClaudeAPI([{ role: 'user', content: prompt }], 3000);
   const text = data.content[0].text.trim();
   const m = text.match(/\[[\s\S]*\]/);
   if (!m) throw new Error('No JSON array in response');
-  return sanitizeLeadLinks(JSON.parse(m[0]));
+
+  // Build a lookup map of original links by company+title so we can restore them
+  // even if Claude accidentally modified them
+  const linkMap = new Map();
+  rawJobs.forEach(j => {
+    if (j.link && j._source) {
+      const key = `${(j.company||'').toLowerCase()}|${(j.title||'').toLowerCase().slice(0,40)}`;
+      linkMap.set(key, { link: j.link, _source: j._source });
+    }
+  });
+
+  const scored = JSON.parse(m[0]).map(j => {
+    const key = `${(j.company||'').toLowerCase()}|${(j.title||'').toLowerCase().slice(0,40)}`;
+    const orig = linkMap.get(key);
+    // Prefer the original link from the scraped source — never trust Claude to reproduce it
+    if (orig) return { ...j, link: orig.link, _source: orig._source };
+    return j;
+  });
+
+  // Only sanitise leads that still have no reliable link
+  return scored.map(j => ({
+    ...j,
+    link: resolveLeadLink(j.company || '', j.title || '', j.link, j._source),
+  }));
 }
 
 // ─── Generate fresh leads from Claude's knowledge ──────────────────────────
@@ -2801,7 +2859,7 @@ async function searchLiveJobLeads() {
       const scoredJobs = scored.status === 'fulfilled' ? scored.value : [];
       const genJobs    = generated.status === 'fulfilled' ? generated.value : [];
 
-      jobs = [...scoredJobs, ...genJobs.slice(0, Math.max(0, 10 - scoredJobs.length))];
+      jobs = [...scoredJobs, ...genJobs.slice(0, Math.max(0, 28 - scoredJobs.length))];
       const cpCount = careerPageJobs.length;
       sourceNote = `${realJobs.length} live listings (incl. ${cpCount} from IB career pages) + AI-curated roles`;
 
