@@ -754,6 +754,28 @@
       /* Add safe-area padding for phones with home bars */
       body { padding-bottom: env(safe-area-inset-bottom, 0); }
     }
+
+    /* ── Level bar ── */
+    .level-bar-wrap {
+      width: 72px; height: 6px;
+      background: var(--surface2);
+      border-radius: 3px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+    .level-bar-fill {
+      height: 100%;
+      border-radius: 3px;
+      background: linear-gradient(90deg, rgba(255, 90, 40, 0.75), rgba(255, 164, 43, 0.88));
+      transition: width 0.5s ease;
+    }
+    .level-xp-row {
+      display: flex; align-items: center; gap: 6px; margin-top: 5px;
+    }
+    .level-xp-label {
+      font-size: 11px; color: var(--text-muted); white-space: nowrap;
+    }
   </style>
 </head>
 <body>
@@ -908,6 +930,18 @@
       </div>
       <div class="stat" style="margin-left:auto">
         <div><div class="stat-val" id="as-rate" style="color:var(--accent2)">—</div><div class="stat-label">Response Rate</div></div>
+      </div>
+      <div class="stat-divider"></div>
+      <div class="stat" id="as-level-stat">
+        <div>
+          <div class="stat-val" id="as-level" style="color:var(--stretch)">⚡ Lvl 0</div>
+          <div class="level-xp-row">
+            <div class="level-bar-wrap">
+              <div class="level-bar-fill" id="as-level-fill" style="width:0%"></div>
+            </div>
+            <div class="level-xp-label" id="as-level-xp">0 / 10</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -1458,6 +1492,7 @@ function renderApps() {
   document.getElementById('as-interview').textContent= interview.length;
   document.getElementById('as-rate').textContent     = totalSub ? rate + '%' : '—';
   document.getElementById('pill-apps').textContent   = ALL_APPS.length;
+  updateLevelBar(ALL_APPS.length);
 
   // Pipeline bar
   const bar = document.getElementById('pipeline-bar');
@@ -1909,6 +1944,7 @@ function renderAppsStats() {
   document.getElementById('as-interview').textContent = interview.length;
   document.getElementById('as-rate').textContent      = totalSub ? rate + '%' : '—';
   document.getElementById('pill-apps').textContent    = ALL_APPS.length;
+  updateLevelBar(ALL_APPS.length);
 
   const bar = document.getElementById('pipeline-bar');
   if (bar) {
@@ -1920,6 +1956,19 @@ function renderAppsStats() {
       `<div class="pipe-seg" style="flex:${s.pct};background:${s.color}" title="${s.title}: ${s.pct}"></div>`
     ).join('');
   }
+}
+
+// ─── Level bar ─────────────────────────────────────────────────────────────
+function updateLevelBar(total) {
+  const level = Math.floor(total / 10);
+  const xp    = total % 10;
+  const pct   = (xp / 10) * 100;
+  const lvlEl  = document.getElementById('as-level');
+  const fillEl = document.getElementById('as-level-fill');
+  const xpEl   = document.getElementById('as-level-xp');
+  if (lvlEl)  lvlEl.textContent       = `⚡ Lvl ${level}`;
+  if (fillEl) fillEl.style.width      = pct + '%';
+  if (xpEl)   xpEl.textContent        = `${xp} / 10`;
 }
 
 // ─── Settings modal ────────────────────────────────────────────────────────
