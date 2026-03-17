@@ -28,6 +28,33 @@
       --status-notapplied: #8b90b0;
     }
 
+    /* ── Light theme (Apple.com-inspired) ── */
+    html[data-theme="light"] {
+      --bg: #f5f5f7;
+      --surface: #ffffff;
+      --surface2: #f2f2f7;
+      --border: #d2d2d7;
+      --accent: #0071e3;
+      --accent-soft: rgba(0, 113, 227, 0.10);
+      --accent2: #34c759;
+      --text: #1d1d1f;
+      --text-muted: #6e6e73;
+      --strong: #34c759;
+      --good: #0071e3;
+      --stretch: #ff9f0a;
+      --status-pending: #0071e3;
+      --status-rejected: #ff3b30;
+      --status-interview: #28a745;
+      --status-offer: #30d158;
+      --status-notapplied: #6e6e73;
+    }
+    html[data-theme="light"] .modal-overlay { background: rgba(0,0,0,0.45); }
+    html[data-theme="light"] .modal { box-shadow: 0 8px 40px rgba(0,0,0,0.18); }
+    html[data-theme="light"] .card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+    html[data-theme="light"] .status-select.s-rejected { background: rgba(255,59,48,0.10); }
+    html[data-theme="light"] .status-select option { background: #fff; color: #1d1d1f; }
+    html[data-theme="light"] .form-row select option { background: #fff; color: #1d1d1f; }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     body {
@@ -291,6 +318,34 @@
     .s-offer    { background: rgba(52,211,153,0.15);  color: var(--status-offer); }
     .s-notyet   { background: rgba(139,144,176,0.12); color: var(--status-notapplied); }
 
+    /* ── Inline status select in table ── */
+    .status-select {
+      background: rgba(139,144,176,0.12);
+      color: var(--status-notapplied);
+      border: 1px solid transparent;
+      border-radius: 20px;
+      padding: 5px 10px;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      letter-spacing: 0.2px;
+      transition: border-color 0.15s, background 0.15s, opacity 0.15s;
+      white-space: nowrap;
+      max-width: 190px;
+    }
+    .status-select:hover { border-color: var(--border); }
+    .status-select:focus { border-color: var(--accent); outline: none; }
+    .status-select option { background: var(--surface2); color: var(--text); font-weight: 600; }
+    .status-select.s-pending  { background: rgba(79,110,247,0.15);  color: var(--status-pending); }
+    .status-select.s-rejected { background: rgba(251,113,133,0.15); color: var(--status-rejected); }
+    .status-select.s-interview{ background: rgba(34,211,176,0.15);  color: var(--status-interview); }
+    .status-select.s-offer    { background: rgba(52,211,153,0.15);  color: var(--status-offer); }
+    .status-select.s-notyet   { background: rgba(139,144,176,0.12); color: var(--status-notapplied); }
+    .status-select.saving     { opacity: 0.55; cursor: wait; pointer-events: none; }
+
     .tbl-salary { font-size: 12px; color: var(--accent2); font-weight: 600; white-space: nowrap; }
     .tbl-date   { font-size: 12px; color: var(--text-muted); white-space: nowrap; }
     .tbl-notes  { font-size: 12px; color: var(--text-muted); max-width: 200px; }
@@ -303,6 +358,27 @@
       transition: all 0.15s; white-space: nowrap;
     }
     .view-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Row gear (edit) button ── */
+    .row-gear-btn {
+      background: none; border: 1px solid transparent;
+      border-radius: 6px; width: 30px; height: 30px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: var(--text-muted); font-size: 15px;
+      transition: all 0.15s; opacity: 0;
+    }
+    tr:hover .row-gear-btn { opacity: 1; }
+    .row-gear-btn:hover { border-color: var(--border); background: var(--surface2); color: var(--text); }
+    td.gear-cell { width: 42px; padding: 0 8px 0 4px; }
+
+    /* ── Danger (remove) button ── */
+    .btn-danger {
+      background: none; border: 1px solid rgba(251,113,133,0.4);
+      border-radius: 8px; padding: 9px 18px;
+      color: var(--status-rejected); font-size: 13px; font-weight: 600;
+      cursor: pointer; transition: all 0.15s; margin-right: auto;
+    }
+    .btn-danger:hover { background: rgba(251,113,133,0.1); border-color: var(--status-rejected); }
 
     /* ── Pipeline bar ── */
     .pipeline-bar {
@@ -359,6 +435,16 @@
       transition: all 0.15s; flex-shrink: 0;
     }
     .settings-btn:hover { border-color: var(--text-muted); color: var(--text); }
+
+    /* ── Theme toggle button ── */
+    .theme-toggle-btn {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 16px; color: var(--text-muted);
+      transition: all 0.15s; flex-shrink: 0;
+    }
+    .theme-toggle-btn:hover { border-color: var(--accent); color: var(--accent); }
 
     /* ── Cover Letter tab ── */
     .cl-layout {
@@ -690,6 +776,7 @@
     <div class="header-meta" style="display:flex;align-items:center;gap:10px">
       <div class="job-count" id="header-count">Loading…</div>
       <div class="last-updated" id="last-updated"></div>
+      <button class="theme-toggle-btn" id="theme-toggle-btn" onclick="toggleTheme()" title="Toggle light/dark mode">🌙</button>
       <button class="settings-btn" onclick="openSettings()" title="Settings">⚙️</button>
     </div>
   </div>
@@ -951,10 +1038,11 @@
         <div class="form-row">
           <label>Status</label>
           <select id="f-status">
-            <option value="Not Yet Applied">Not Yet Applied</option>
+            <option value="Have Not Applied">Have Not Applied</option>
             <option value="Submitted - Pending Response" selected>Submitted – Pending Response</option>
-            <option value="Interview">Interview</option>
             <option value="Rejected">Rejected</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Offer Extended - In Progress">Offer Extended – In Progress</option>
           </select>
         </div>
         <div class="form-cols">
@@ -995,6 +1083,82 @@
         <div class="form-actions" style="justify-content:center;margin-top:16px">
           <button class="btn-cancel" onclick="closeAddModal()">Close</button>
           <button class="btn-submit" onclick="resetModal()">Add Another</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ EDIT MODAL ══════════════════════════ -->
+<div class="modal-overlay" id="edit-modal" onclick="if(event.target===this)closeEditModal()">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">✏️ Edit Application</div>
+      <button class="modal-close" onclick="closeEditModal()">×</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="ef-id" />
+      <div id="edit-form-wrap">
+        <div class="form-cols">
+          <div class="form-row">
+            <label>Company *</label>
+            <input type="text" id="ef-company" placeholder="e.g. Goldman Sachs" />
+          </div>
+          <div class="form-row">
+            <label>Role *</label>
+            <input type="text" id="ef-role" placeholder="e.g. IB Analyst" />
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Status</label>
+          <select id="ef-status">
+            <option value="Have Not Applied">Have Not Applied</option>
+            <option value="Submitted - Pending Response">Submitted – Pending Response</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Interviewing">Interviewing</option>
+            <option value="Offer Extended - In Progress">Offer Extended – In Progress</option>
+          </select>
+        </div>
+        <div class="form-cols">
+          <div class="form-row">
+            <label>Date Added</label>
+            <input type="date" id="ef-date-added" />
+          </div>
+          <div class="form-row">
+            <label>Date Submitted</label>
+            <input type="date" id="ef-date-submitted" />
+          </div>
+        </div>
+        <div class="form-cols">
+          <div class="form-row">
+            <label>Salary / Range</label>
+            <input type="text" id="ef-salary" placeholder="e.g. $110,000–$130,000" />
+          </div>
+          <div class="form-row">
+            <label>Job Link</label>
+            <input type="url" id="ef-link" placeholder="https://…" />
+          </div>
+        </div>
+        <div class="form-row">
+          <label>Notes</label>
+          <textarea id="ef-notes" placeholder="e.g. IB / M&A — referred by alumni"></textarea>
+        </div>
+        <div class="form-actions">
+          <button class="btn-danger" id="edit-delete-btn" onclick="deleteApp()">🗑 Remove Application</button>
+          <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+          <button class="btn-submit" id="edit-submit-btn" onclick="submitEditApp()">Save Changes</button>
+        </div>
+      </div>
+      <div id="edit-success" style="display:none">
+        <div class="form-success">✓ Application updated!</div>
+        <div class="form-actions" style="justify-content:center;margin-top:16px">
+          <button class="btn-cancel" onclick="closeEditModal()">Close</button>
+        </div>
+      </div>
+      <div id="edit-deleted" style="display:none">
+        <div class="form-success" style="color:var(--status-rejected)">🗑 Application removed.</div>
+        <div class="form-actions" style="justify-content:center;margin-top:16px">
+          <button class="btn-cancel" onclick="closeEditModal()">Close</button>
         </div>
       </div>
     </div>
@@ -1051,6 +1215,43 @@ const CAT_COLORS = {
 };
 const catColor = c => CAT_COLORS[c] || '#8b90b0';
 
+// ─── Status options ─────────────────────────────────────────────────────────
+const STATUS_OPTIONS = [
+  { value: 'Have Not Applied',             cls: 's-notyet',    label: 'Have Not Applied' },
+  { value: 'Submitted - Pending Response', cls: 's-pending',   label: 'Submitted – Pending' },
+  { value: 'Rejected',                     cls: 's-rejected',  label: 'Rejected' },
+  { value: 'Interviewing',                 cls: 's-interview', label: 'Interviewing' },
+  { value: 'Offer Extended - In Progress', cls: 's-offer',     label: 'Offer Extended' },
+];
+
+function normalizeStatusToOption(s) {
+  if (!s) return 'Have Not Applied';
+  const l = s.toLowerCase();
+  if (l.includes('offer'))                                  return 'Offer Extended - In Progress';
+  if (l.includes('interview'))                              return 'Interviewing';
+  if (l.includes('reject'))                                 return 'Rejected';
+  if (l.includes('pending') || l.includes('submitted'))    return 'Submitted - Pending Response';
+  if (l.includes('not yet') || l.includes('not applied') || l.includes('have not')) return 'Have Not Applied';
+  return 'Have Not Applied';
+}
+
+function statusCls(s) {
+  if (!s) return 's-notyet';
+  const l = s.toLowerCase();
+  if (l.includes('offer'))                               return 's-offer';
+  if (l.includes('interview'))                           return 's-interview';
+  if (l.includes('reject'))                              return 's-rejected';
+  if (l.includes('pending') || l.includes('submitted')) return 's-pending';
+  return 's-notyet';
+}
+
+function statusOptionsHtml(currentStatus) {
+  const norm = normalizeStatusToOption(currentStatus);
+  return STATUS_OPTIONS.map(o =>
+    `<option value="${o.value}"${o.value === norm ? ' selected' : ''}>${o.label}</option>`
+  ).join('');
+}
+
 // ─── Helpers ───────────────────────────────────────────────────────────────
 const initials = n => n.split(/[\s&]+/).slice(0,2).map(w=>w[0]).join('').toUpperCase();
 const isNew = d => d && (Date.now() - new Date(d)) < 86400000;
@@ -1071,16 +1272,18 @@ function fitClass(f) {
 }
 
 function statusInfo(s) {
-  if (!s) return { cls:'s-notyet', label:'Unknown' };
+  if (!s) return { cls:'s-notyet', label:'Have Not Applied' };
   const l = s.toLowerCase();
-  if (l.includes('interview') || l.includes('offer'))
-    return { cls:'s-interview', label: s };
+  if (l.includes('offer'))
+    return { cls:'s-offer',     label:'Offer Extended' };
+  if (l.includes('interview'))
+    return { cls:'s-interview', label:'Interviewing' };
   if (l.includes('reject'))
     return { cls:'s-rejected',  label:'Rejected' };
   if (l.includes('pending') || l.includes('submitted'))
     return { cls:'s-pending',   label:'Pending' };
-  if (l.includes('not yet') || l.includes('not applied'))
-    return { cls:'s-notyet',    label:'Not Applied' };
+  if (l.includes('not yet') || l.includes('not applied') || l.includes('have not'))
+    return { cls:'s-notyet',    label:'Have Not Applied' };
   return { cls:'s-notyet', label: s };
 }
 
@@ -1295,11 +1498,13 @@ function renderApps() {
         <th onclick="sortApps('status')">Status <span class="sort-arrow">↕</span></th>
         <th>Salary</th>
         <th onclick="sortApps('submitted')">Submitted <span class="sort-arrow">↕</span></th>
+        <th style="width:42px"></th>
       </tr></thead>
       <tbody>
         ${apps.map(a => {
-          const si  = statusInfo(a.status);
           const sal = a.salary && a.salary !== '—' && a.salary !== '-' ? a.salary : null;
+          const safeId = (a.id || '').replace(/"/g, '&quot;');
+          const escapedId = (a.id || '').replace(/'/g, "\\'");
           return `<tr>
             <td>
               <div class="td-company">
@@ -1310,11 +1515,18 @@ function renderApps() {
                 </div>
               </div>
             </td>
-            <td><span class="status-badge ${si.cls}">
-              <span class="status-dot" style="background:currentColor"></span>${si.label}
-            </span></td>
+            <td>
+              <select class="status-select ${statusCls(a.status)}"
+                data-id="${safeId}"
+                onchange="updateAppStatus(this.dataset.id, this.value, this)">
+                ${statusOptionsHtml(a.status)}
+              </select>
+            </td>
             <td class="tbl-salary">${sal || '<span style="color:var(--text-muted)">—</span>'}</td>
             <td class="tbl-date">${fmtDate(a.date_submitted) !== '—' ? fmtDate(a.date_submitted) : fmtDate(a.date_added)}</td>
+            <td class="gear-cell">
+              <button class="row-gear-btn" onclick="openEditModal('${escapedId}')" title="Edit application">⚙️</button>
+            </td>
           </tr>`;
         }).join('')}
       </tbody>
@@ -1490,6 +1702,215 @@ async function submitNewApp() {
     btn.disabled = false;
     btn.textContent = 'Save Application';
     alert(`Failed to save application:\n${e.message}\n\nCheck the browser console (F12) for more details.`);
+  }
+}
+
+// ─── Edit / Delete application ─────────────────────────────────────────────
+let _editingApp = null; // holds the full app object being edited
+
+function openEditModal(id) {
+  const app = ALL_APPS.find(a => a.id === id);
+  if (!app) return;
+  _editingApp = app;
+
+  // Pre-fill all fields
+  document.getElementById('ef-id').value            = app.id             || '';
+  document.getElementById('ef-company').value       = app.company        || '';
+  document.getElementById('ef-role').value          = app.role           || '';
+  document.getElementById('ef-salary').value        = app.salary         || '';
+  document.getElementById('ef-link').value          = app.link           || '';
+  document.getElementById('ef-notes').value         = app.notes          || '';
+  document.getElementById('ef-date-added').value    = app.date_added     || '';
+  document.getElementById('ef-date-submitted').value= app.date_submitted || '';
+
+  // Set status dropdown (normalize to one of the 5 canonical values)
+  const sel = document.getElementById('ef-status');
+  sel.value = normalizeStatusToOption(app.status || '');
+
+  // Reset to form view
+  document.getElementById('edit-form-wrap').style.display = '';
+  document.getElementById('edit-success').style.display   = 'none';
+  document.getElementById('edit-deleted').style.display   = 'none';
+  document.getElementById('edit-submit-btn').disabled      = false;
+  document.getElementById('edit-submit-btn').textContent   = 'Save Changes';
+  document.getElementById('edit-delete-btn').disabled      = false;
+
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+  _editingApp = null;
+}
+
+async function submitEditApp() {
+  const id = document.getElementById('ef-id').value;
+  if (!id) return alert('No application ID found — cannot save.');
+
+  const company = document.getElementById('ef-company').value.trim();
+  const role    = document.getElementById('ef-role').value.trim();
+  if (!company || !role) return alert('Company and Role are required.');
+
+  const patch = {
+    'Company Name':       company,
+    'Role':               role,
+    'Date Added':         document.getElementById('ef-date-added').value      || '',
+    'Application Status': document.getElementById('ef-status').value,
+    'Date Submitted':     document.getElementById('ef-date-submitted').value  || '',
+    'Link to Job Req':    document.getElementById('ef-link').value.trim()     || '',
+    'Salary':             document.getElementById('ef-salary').value.trim()   || '',
+    'Notes':              document.getElementById('ef-notes').value.trim()    || '',
+  };
+
+  const btn = document.getElementById('edit-submit-btn');
+  btn.disabled = true; btn.textContent = 'Saving…';
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/Applications%20Database?id=eq.${encodeURIComponent(id)}`,
+      { method: 'PATCH', headers: SB_POST_HEADERS, body: JSON.stringify(patch) }
+    );
+    if (!res.ok) {
+      let msg = `HTTP ${res.status}`;
+      try { const j = await res.json(); msg = j.message || j.error || msg; } catch {}
+      throw new Error(msg);
+    }
+
+    // Update local state
+    const idx = ALL_APPS.findIndex(a => a.id === id);
+    if (idx !== -1) {
+      ALL_APPS[idx] = {
+        ...ALL_APPS[idx],
+        company, role,
+        date_added:     patch['Date Added'],
+        status:         patch['Application Status'],
+        date_submitted: patch['Date Submitted'],
+        link:           patch['Link to Job Req'],
+        salary:         patch['Salary'],
+        notes:          patch['Notes'],
+      };
+    }
+    renderApps();
+    updateHeaderCount();
+
+    document.getElementById('edit-form-wrap').style.display = 'none';
+    document.getElementById('edit-success').style.display   = '';
+
+  } catch(e) {
+    console.error('submitEditApp error:', e);
+    btn.disabled = false; btn.textContent = 'Save Changes';
+    alert(`Failed to update: ${e.message}`);
+  }
+}
+
+async function deleteApp() {
+  const id = document.getElementById('ef-id').value;
+  if (!id) return alert('No application ID found.');
+  if (!confirm(`Remove "${_editingApp?.company || 'this application'}" from your tracker? This cannot be undone.`)) return;
+
+  const delBtn = document.getElementById('edit-delete-btn');
+  delBtn.disabled = true; delBtn.textContent = 'Removing…';
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/Applications%20Database?id=eq.${encodeURIComponent(id)}`,
+      { method: 'DELETE', headers: SB_POST_HEADERS }
+    );
+    if (!res.ok) {
+      let msg = `HTTP ${res.status}`;
+      try { const j = await res.json(); msg = j.message || j.error || msg; } catch {}
+      throw new Error(msg);
+    }
+
+    // Remove from local state
+    ALL_APPS = ALL_APPS.filter(a => a.id !== id);
+    renderApps();
+    updateHeaderCount();
+
+    document.getElementById('edit-form-wrap').style.display = 'none';
+    document.getElementById('edit-deleted').style.display   = '';
+
+  } catch(e) {
+    console.error('deleteApp error:', e);
+    delBtn.disabled = false; delBtn.textContent = '🗑 Remove Application';
+    alert(`Failed to remove: ${e.message}`);
+  }
+}
+
+// ─── Inline status update (from table dropdown) ────────────────────────────
+async function updateAppStatus(id, newStatus, selectEl) {
+  if (!id) return;
+  const prevCls = selectEl ? selectEl.className : '';
+
+  // Optimistic UI: show saving state
+  if (selectEl) {
+    selectEl.className = `status-select ${statusCls(newStatus)} saving`;
+    selectEl.disabled = true;
+  }
+
+  try {
+    const res = await fetch(
+      `${SUPABASE_URL}/rest/v1/Applications%20Database?id=eq.${encodeURIComponent(id)}`,
+      { method: 'PATCH', headers: SB_POST_HEADERS, body: JSON.stringify({ 'Application Status': newStatus }) }
+    );
+    if (!res.ok) {
+      let msg = `HTTP ${res.status}`;
+      try { const j = await res.json(); msg = j.message || j.error || msg; } catch {}
+      throw new Error(msg);
+    }
+
+    // Update local state
+    const app = ALL_APPS.find(a => a.id === id);
+    if (app) app.status = newStatus;
+
+    // Re-style the select (remove saving state)
+    if (selectEl) {
+      selectEl.className = `status-select ${statusCls(newStatus)}`;
+      selectEl.disabled = false;
+    }
+
+    // Refresh stats strip + pipeline bar without re-rendering the whole table
+    renderAppsStats();
+    updateHeaderCount();
+
+  } catch(e) {
+    console.error('updateAppStatus error:', e);
+    if (selectEl) {
+      // Revert class and re-enable
+      selectEl.className = prevCls.replace(' saving', '');
+      selectEl.disabled = false;
+    }
+    alert(`Failed to update status: ${e.message}`);
+    renderApps(); // full re-render to restore original value in dropdown
+  }
+}
+
+// Update stats + pipeline bar in place (no full table re-render)
+function renderAppsStats() {
+  if (!ALL_APPS.length) return;
+  const submitted = ALL_APPS.filter(a => { const s = (a.status||'').toLowerCase(); return s.includes('submit') || s.includes('pending'); });
+  const rejected  = ALL_APPS.filter(a => (a.status||'').toLowerCase().includes('reject'));
+  const interview = ALL_APPS.filter(a => { const s = (a.status||'').toLowerCase(); return s.includes('interview') || s.includes('offer'); });
+  const responded = rejected.length + interview.length;
+  const totalSub  = submitted.length + responded;
+  const rate      = totalSub > 0 ? Math.round((responded / totalSub) * 100) : 0;
+
+  document.getElementById('as-total').textContent     = ALL_APPS.length;
+  document.getElementById('as-pending').textContent   = submitted.length;
+  document.getElementById('as-rejected').textContent  = rejected.length;
+  document.getElementById('as-interview').textContent = interview.length;
+  document.getElementById('as-rate').textContent      = totalSub ? rate + '%' : '—';
+  document.getElementById('pill-apps').textContent    = ALL_APPS.length;
+
+  const bar = document.getElementById('pipeline-bar');
+  if (bar) {
+    bar.innerHTML = [
+      { pct: submitted.length, color: 'var(--status-pending)',  title: 'Pending' },
+      { pct: rejected.length,  color: 'var(--status-rejected)', title: 'Rejected' },
+      { pct: interview.length, color: 'var(--status-interview)',title: 'Interview/Offer' },
+    ].filter(s => s.pct > 0).map(s =>
+      `<div class="pipe-seg" style="flex:${s.pct};background:${s.color}" title="${s.title}: ${s.pct}"></div>`
+    ).join('');
   }
 }
 
@@ -2427,7 +2848,32 @@ async function searchLiveJobLeads() {
   updateHeaderCount();
 }
 
+// ─── Theme toggle ───────────────────────────────────────────────────────────
+function toggleTheme() {
+  const html = document.documentElement;
+  const isLight = html.getAttribute('data-theme') === 'light';
+  const next = isLight ? 'dark' : 'light';
+  html.setAttribute('data-theme', next);
+  localStorage.setItem('theme', next);
+  const btn = document.getElementById('theme-toggle-btn');
+  if (btn) btn.textContent = next === 'light' ? '☀️' : '🌙';
+}
+
 // ─── Boot ──────────────────────────────────────────────────────────────────
+// Apply saved theme before first paint
+(function initTheme() {
+  const saved = localStorage.getItem('theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  // Update button icon after DOM is ready
+  document.addEventListener('DOMContentLoaded', () => {
+    const btn = document.getElementById('theme-toggle-btn');
+    if (btn) btn.textContent = saved === 'light' ? '☀️' : '🌙';
+  });
+  // Also set immediately in case DOMContentLoaded already fired
+  const btn = document.getElementById('theme-toggle-btn');
+  if (btn) btn.textContent = saved === 'light' ? '☀️' : '🌙';
+})();
+
 loadLeads();
 loadApps();
 </script>
