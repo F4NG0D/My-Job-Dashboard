@@ -693,18 +693,20 @@
       }
       .search-wrap { min-width: 0; }
 
-      /* Stats strip: scrollable, tighter */
+      /* Stats strip: 3-column grid — all stats visible at once, no scrolling */
       .stats-strip {
-        gap: 12px;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px 8px;
         padding: 12px 14px;
-        overflow-x: auto;
-        flex-wrap: nowrap;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
+        overflow-x: visible;
       }
-      .stats-strip::-webkit-scrollbar { display: none; }
-      .stat-divider { min-width: 1px; }
+      .stat-divider { display: none; }
       .stat[style*="margin-left:auto"] { margin-left: 0 !important; }
+      .stat-val { font-size: 16px; }
+      /* Level bar: tighter to fit in grid cell */
+      .level-bar-wrap { width: 54px; }
+      .level-xp-label { font-size: 10px; }
 
       /* Leads grid */
       .grid { grid-template-columns: 1fr; gap: 10px; }
@@ -1114,7 +1116,7 @@
             <option value="Have Not Applied">Have Not Applied</option>
             <option value="Submitted - Pending Response" selected>Submitted – Pending Response</option>
             <option value="Rejected">Rejected</option>
-            <option value="Interviewing">Interviewing</option>
+            <option value="Interviewed">Interviewed</option>
             <option value="Offer Extended - In Progress">Offer Extended – In Progress</option>
           </select>
         </div>
@@ -1188,7 +1190,7 @@
             <option value="Have Not Applied">Have Not Applied</option>
             <option value="Submitted - Pending Response">Submitted – Pending Response</option>
             <option value="Rejected">Rejected</option>
-            <option value="Interviewing">Interviewing</option>
+            <option value="Interviewed">Interviewed</option>
             <option value="Offer Extended - In Progress">Offer Extended – In Progress</option>
           </select>
         </div>
@@ -1296,7 +1298,7 @@ const STATUS_OPTIONS = [
   { value: 'Have Not Applied',             cls: 's-notyet',    label: 'Have Not Applied' },
   { value: 'Submitted - Pending Response', cls: 's-pending',   label: 'Submitted – Pending' },
   { value: 'Rejected',                     cls: 's-rejected',  label: 'Rejected' },
-  { value: 'Interviewing',                 cls: 's-interview', label: 'Interviewing' },
+  { value: 'Interviewed',                 cls: 's-interview', label: 'Interviewed' },
   { value: 'Offer Extended - In Progress', cls: 's-offer',     label: 'Offer Extended' },
 ];
 
@@ -1304,7 +1306,7 @@ function normalizeStatusToOption(s) {
   if (!s) return 'Have Not Applied';
   const l = s.toLowerCase();
   if (l.includes('offer'))                                  return 'Offer Extended - In Progress';
-  if (l.includes('interview'))                              return 'Interviewing';
+  if (l.includes('interview'))                              return 'Interviewed';
   if (l.includes('reject'))                                 return 'Rejected';
   if (l.includes('pending') || l.includes('submitted'))    return 'Submitted - Pending Response';
   if (l.includes('not yet') || l.includes('not applied') || l.includes('have not')) return 'Have Not Applied';
@@ -1353,7 +1355,7 @@ function statusInfo(s) {
   if (l.includes('offer'))
     return { cls:'s-offer',     label:'Offer Extended' };
   if (l.includes('interview'))
-    return { cls:'s-interview', label:'Interviewing' };
+    return { cls:'s-interview', label:'Interviewed' };
   if (l.includes('reject'))
     return { cls:'s-rejected',  label:'Rejected' };
   if (l.includes('pending') || l.includes('submitted'))
@@ -2292,7 +2294,7 @@ Sincerely,
 - Use real specifics from the resume (company names, deal volumes, titles, tools)
 - No bullet points, bold text, headers, or markdown anywhere — clean prose only
 - Each paragraph transitions naturally to the next
-- Body word count: 300–420 words
+- Body word count: 400–500 words
 - Output ONLY the finished cover letter — no preamble, labels, or commentary before or after`;
 }
 
@@ -2317,8 +2319,10 @@ async function generateCoverLetter() {
   const prompt = buildCoverLetterPrompt(resumeText, jobText, jobUrl);
   _clPromptCache = prompt;
 
+  const system = `You are an expert cover letter writer specializing in investment banking and finance careers. You write precise, compelling, and professionally formatted cover letters that get candidates interviews at bulge bracket and boutique IB firms. Follow the user's formatting instructions exactly and output only the finished letter.`;
+
   try {
-    const data = await callClaudeAPI([{ role: 'user', content: prompt }], 1200);
+    const data = await callClaudeAPI([{ role: 'user', content: prompt }], 2000, system);
     out.value = data.content[0].text;
     status.textContent = '✓ Cover letter generated';
   } catch(e) {
@@ -2353,12 +2357,13 @@ function copyPromptForClaude() {
 }
 
 // ─── Shared Claude API caller (direct → CORS proxy fallback) ───────────────
-async function callClaudeAPI(messages, maxTokens = 1500) {
+async function callClaudeAPI(messages, maxTokens = 1500, system = null) {
   // Priority: Settings (localStorage) → hardcoded constant above → error
   const apiKey = localStorage.getItem('anthropic_api_key') || ANTHROPIC_KEY || '';
   if (!apiKey) throw new Error('NO_API_KEY');
 
   const bodyObj = { model: 'claude-sonnet-4-6', max_tokens: maxTokens, messages };
+  if (system) bodyObj.system = system;
   const reqHeaders = {
     'content-type': 'application/json',
     'x-api-key': apiKey,
